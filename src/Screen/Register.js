@@ -86,6 +86,7 @@ class Register extends Component {
             .database()
             .ref('users/' + userID)
             .set({
+              uid: userID,
               username: formData.username,
               email: formData.email,
               fullname: formData.fullname,

@@ -54,7 +54,7 @@ const AppRoot = createAppContainer(
       App: AppStack,
     },
     {
-      initialRouteName: 'Login',
+      initialRouteName: 'Splash',
     },
   ),
 );

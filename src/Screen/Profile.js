@@ -8,6 +8,7 @@ import {
   StatusBar,
   ScrollView,
   Alert,
+  Image,
 } from 'react-native';
 
 import {Icon} from 'native-base';
@@ -21,8 +22,18 @@ import AsyncStorage from '@react-native-community/async-storage';
 class Profile extends Component {
   constructor() {
     super();
-    this.state = {};
+    this.state = {
+      email: '',
+      photo: '',
+      username: '',
+    };
   }
+
+  componentDidMount = async () => {
+    this.setState({email: await AsyncStorage.getItem('email')});
+    this.setState({photo: await AsyncStorage.getItem('photo')});
+    this.setState({username: await AsyncStorage.getItem('username')});
+  };
 
   handleLogout = () => {
     firebase
@@ -47,7 +58,7 @@ class Profile extends Component {
   confirmation = () => {
     Alert.alert(
       'Log Out',
-      'Are you sure want to log out of this ChatWae account?',
+      'Are you sure want to log out this ChatWae account?',
       [
         {
           text: 'NO',
@@ -78,6 +89,7 @@ class Profile extends Component {
             />
           </TouchableOpacity>
           <Text style={styles.heading}>Profile</Text>
+
           <TouchableOpacity activeOpacity={0.8} onPress={this.confirmation}>
             <Icon
               type="AntDesign"
@@ -89,12 +101,20 @@ class Profile extends Component {
         <ScrollView>
           <View style={styles.div}>
             <View style={styles.top}>
-              <View style={styles.img}></View>
+              <View style={styles.img}>
+                <Image
+                  source={{uri: this.state.photo}}
+                  style={{width: '70%', flex: 1, resizeMode: 'contain'}}
+                />
+              </View>
             </View>
             <View style={styles.content}>
               <View style={styles.field}>
                 <Text style={styles.title}>Username</Text>
-                <TextInput style={styles.input} />
+                <TextInput
+                  style={styles.input}
+                  defaultValue={this.state.username}
+                />
               </View>
               <View style={styles.field}>
                 <Text style={styles.title}>Fullname</Text>
@@ -102,7 +122,10 @@ class Profile extends Component {
               </View>
               <View style={styles.field}>
                 <Text style={styles.title}>Email</Text>
-                <TextInput style={styles.input} />
+                <TextInput
+                  style={styles.input}
+                  defaultValue={this.state.email}
+                />
               </View>
             </View>
             <TouchableOpacity activeOpacity={0.8} style={styles.button}>
@@ -123,15 +146,14 @@ const styles = StyleSheet.create({
     alignItems: 'flex-end',
   },
   button: {
-    marginTop: 20,
     marginRight: 20,
     backgroundColor: '#8de969',
     width: 120,
-    height: 50,
+    height: 40,
     borderRadius: 50,
     justifyContent: 'center',
     alignItems: 'center',
-    elevation: 1,
+    elevation: 2,
     marginBottom: 20,
   },
   title: {
@@ -149,10 +171,7 @@ const styles = StyleSheet.create({
   field: {
     height: 'auto',
     width: '100%',
-    marginBottom: 15,
     padding: 10,
-    backgroundColor: 'whitesmoke',
-    borderRadius: 3,
   },
   content: {
     height: 'auto',
@@ -160,10 +179,14 @@ const styles = StyleSheet.create({
     padding: 20,
   },
   img: {
-    backgroundColor: 'silver',
+    backgroundColor: 'whitesmoke',
+    elevation: 2,
     width: 140,
     height: 140,
     borderRadius: 100,
+    justifyContent: 'center',
+    alignItems: 'center',
+    overflow: 'hidden',
   },
   top: {
     justifyContent: 'center',
