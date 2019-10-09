@@ -4,47 +4,111 @@ import {
   Text,
   StyleSheet,
   TouchableOpacity,
-  TextInput,
   StatusBar,
+  Image,
 } from 'react-native';
-import {GiftedChat} from 'react-native-gifted-chat';
+import {GiftedChat, Bubble} from 'react-native-gifted-chat';
 
 import {Icon} from 'native-base';
 
 import {withNavigation} from 'react-navigation';
 
+import AsyncStorage from '@react-native-community/async-storage';
+
+import firebase from 'firebase';
+
 class Profile extends Component {
   constructor() {
     super();
     this.state = {
+      friendData: {},
       messages: [],
+      myUid: '',
+      myUsername: '',
+      avatar: '',
+      text: '',
     };
   }
 
   componentDidMount = async () => {
-    await this.setState({
-      messages: [
-        {
-          _id: 1,
-          text: 'Hello developer',
-          createdAt: new Date(),
-          user: {
-            _id: 2,
-            name: 'React Native',
-            avatar: 'https://placeimg.com/140/140/any',
-          },
-        },
-      ],
+    this.setState({
+      myUid: await AsyncStorage.getItem('uid'),
+      myUsername: await AsyncStorage.getItem('username'),
+      avatar: await AsyncStorage.getItem('photo'),
     });
+    await this.setState({friendData: this.props.navigation.state.params});
+    firebase
+      .database()
+      .ref('messages')
+      .child(this.state.myUid)
+      .child(this.state.friendData.uid)
+      .on('child_added', value => {
+        this.setState(previousState => {
+          return {
+            messages: GiftedChat.append(previousState.messages, value.val()),
+          };
+        });
+      });
   };
 
-  onSend(messages = []) {
-    this.setState(previousState => ({
-      messages: GiftedChat.append(previousState.messages, messages),
-    }));
+  sendMessage = () => {
+    if (this.state.text.length > 0) {
+      let msgId = firebase
+        .database()
+        .ref('messages')
+        .child(this.state.myUid)
+        .child(this.state.friendData.uid)
+        .push().key;
+      let updates = {};
+      let message = {
+        _id: msgId,
+        text: this.state.text,
+        createdAt: firebase.database.ServerValue.TIMESTAMP,
+        user: {
+          _id: this.state.myUid,
+          name: this.state.myUsername,
+          avatar: this.state.avatar,
+        },
+      };
+      updates[
+        'messages/' +
+          this.state.myUid +
+          '/' +
+          this.state.friendData.uid +
+          '/' +
+          msgId
+      ] = message;
+      updates[
+        'messages/' +
+          this.state.friendData.uid +
+          '/' +
+          this.state.myUid +
+          '/' +
+          msgId
+      ] = message;
+      firebase
+        .database()
+        .ref()
+        .update(updates);
+      this.setState({text: ''});
+    }
+  };
+
+  renderBubble(props) {
+    return (
+      <Bubble
+        {...props}
+        wrapperStyle={{
+          right: {
+            backgroundColor: '#77d154',
+          },
+        }}
+      />
+    );
   }
 
   render() {
+    const {friendData} = this.state;
     return (
       <Fragment>
         <View>
@@ -62,19 +126,32 @@ class Profile extends Component {
             />
           </TouchableOpacity>
           <TouchableOpacity
-            onPress={() => this.props.navigation.navigate('FriendProfile')}
+            onPress={() =>
+              this.props.navigation.navigate('FriendProfile', friendData)
+            }
             activeOpacity={1}
-            style={{width: '90%', flexDirection: 'row', alignItems: 'center'}}>
-            <View style={styles.img}></View>
-            <Text style={styles.heading}>Name</Text>
+            style={styles.headSub}>
+            <View style={styles.img}>
+              <Image source={{uri: friendData.photo}} style={styles.photo} />
+            </View>
+            <View style={{marginLeft: 5}}>
+              <Text style={styles.heading}>{friendData.username}</Text>
+              <Text style={{color: 'white'}}>{friendData.status}</Text>
+            </View>
           </TouchableOpacity>
         </View>
         <GiftedChat
           messages={this.state.messages}
-          onSend={messages => this.onSend(messages)}
+          onSend={this.sendMessage}
+          showAvatarForEveryMessage={false}
+          renderBubble={this.renderBubble}
+          alignTop={true}
           user={{
-            _id: 1,
+            _id: this.state.myUid,
+            name: this.state.myUsername,
+            avatar: this.state.avatar,
           }}
+          onInputTextChanged={value => this.setState({text: value})}
         />
       </Fragment>
     );
@@ -82,25 +159,37 @@ class Profile extends Component {
 }
 
 const styles = StyleSheet.create({
+  photo: {
+    flex: 1,
+    width: '70%',
+    resizeMode: 'contain',
+  },
+  headSub: {
+    width: '90%',
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
   img: {
     backgroundColor: 'silver',
     width: 38,
     height: 38,
     borderRadius: 50,
-    marginHorizontal: 10,
+    marginHorizontal: 5,
+    justifyContent: 'center',
+    alignItems: 'center',
+    overflow: 'hidden',
   },
 
   iconBack: {
     justifyContent: 'center',
-    width: '15%',
+    width: '12%',
     alignItems: 'center',
   },
   heading: {
     color: 'white',
-    fontSize: 20,
+    fontSize: 18,
     fontWeight: '700',
-    width: '73%',
-    marginLeft: 10,
+    width: 'auto',
   },
   header: {
     backgroundColor: '#433a3f',

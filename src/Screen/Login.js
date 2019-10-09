@@ -38,7 +38,7 @@ class Login extends Component {
         await firebase
           .database()
           .ref('users/' + res.user.uid)
-          .update({status: 'online'});
+          .update({status: 'Online'});
 
         let currentUser = firebase.auth().currentUser;
 

@@ -1,7 +1,5 @@
 import React, {Component, Fragment} from 'react';
-import {View, Text, StyleSheet, TouchableHighlight} from 'react-native';
-
-import {Tab, Tabs} from 'native-base';
+import {View, Text, StyleSheet, TouchableHighlight, Image} from 'react-native';
 
 import {withNavigation} from 'react-navigation';
 
@@ -16,15 +14,22 @@ class CardChat extends Component {
       <Fragment>
         <TouchableHighlight
           underlayColor="whitesmoke"
-          onPress={() => this.props.navigation.navigate('Chat')}
+          onPress={() =>
+            this.props.navigation.navigate('Chat', this.props.data)
+          }
           style={styles.card}>
           <>
             <View style={styles.img}>
-              <View style={styles.avatar}></View>
+              <View style={styles.avatar}>
+                <Image
+                  source={{uri: this.props.data.photo}}
+                  style={{flex: 1, width: '70%', resizeMode: 'contain'}}
+                />
+              </View>
             </View>
             <View style={styles.desc}>
-              <Text style={styles.name}>Name</Text>
-              <Text style={styles.msg}>Lorem Ipsum Dolor Sit amet</Text>
+              <Text style={styles.name}>{this.props.data.username}</Text>
+              <Text style={styles.msg}>{this.props.data.status}</Text>
             </View>
           </>
         </TouchableHighlight>
@@ -48,6 +53,8 @@ const styles = StyleSheet.create({
     width: '100%',
     height: '100%',
     borderRadius: 50,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   img: {
     width: 70,

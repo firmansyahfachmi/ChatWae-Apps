@@ -9,9 +9,11 @@ import {
   ScrollView,
   Alert,
   Image,
+  ActivityIndicator,
+  PermissionsAndroid,
 } from 'react-native';
 
-import {Icon} from 'native-base';
+import {Icon, Toast} from 'native-base';
 
 import {withNavigation} from 'react-navigation';
 
@@ -23,16 +25,43 @@ class Profile extends Component {
   constructor() {
     super();
     this.state = {
-      email: '',
-      photo: '',
-      username: '',
+      userId: '',
+      profile: {},
+      isLoading: false,
+      edit: false,
+      loadingPage: true,
     };
   }
 
+  requestPermission = async () => {
+    try {
+      const granted = await PermissionsAndroid.requestMultiple([
+        PermissionsAndroid.PERMISSIONS.CAMERA,
+        PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE,
+        PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
+      ]);
+      return granted === PermissionsAndroid.RESULTS.GRANTED;
+    } catch (err) {
+      console.log(err);
+      return false;
+    }
+  };
+
   componentDidMount = async () => {
-    this.setState({email: await AsyncStorage.getItem('email')});
-    this.setState({photo: await AsyncStorage.getItem('photo')});
-    this.setState({username: await AsyncStorage.getItem('username')});
+    this.setState({userId: await AsyncStorage.getItem('uid')});
+    firebase
+      .database()
+      .ref('users/' + this.state.userId)
+      .once('value')
+      .then(res => {
+        this.setState({loadingPage: false});
+        let profile = res.val();
+        if (profile !== null) {
+          this.setState({
+            profile,
+          });
+        }
+      });
   };
 
   handleLogout = () => {
@@ -44,7 +73,7 @@ class Profile extends Component {
         await firebase
           .database()
           .ref('users/' + userId)
-          .update({status: 'offline'});
+          .update({status: 'Offline'});
 
         AsyncStorage.removeItem('uid');
         AsyncStorage.removeItem('username');
@@ -69,6 +98,46 @@ class Profile extends Component {
       ],
       {cancelable: true},
     );
+  };
+
+  handleChange = (name, value) => {
+    let newFormData = {...this.state.profile};
+    newFormData[name] = value;
+    this.setState({
+      profile: newFormData,
+    });
+  };
+
+  handleSave = () => {
+    const {profile} = this.state;
+    this.setState({isLoading: true});
+    firebase
+      .database()
+      .ref('users/' + this.state.userId)
+      .update(profile)
+      .then(async () => {
+        AsyncStorage.setItem('email', profile.email);
+        AsyncStorage.setItem('username', profile.username);
+        this.setState({isLoading: false});
+        this.setState({edit: false});
+        Toast.show({
+          text: `Profile Updated`,
+          buttonText: 'Ok',
+          type: 'success',
+          position: 'bottom',
+          duration: 4000,
+          style: styles.toast,
+        });
+      })
+      .catch(err => {
+        Toast.show({
+          text: ' Saving profile failed, ' + err.message,
+          position: 'bottom',
+          type: 'danger',
+          duration: 4000,
+          style: styles.toast,
+        });
+      });
   };
 
   render() {
@@ -98,49 +167,134 @@ class Profile extends Component {
             />
           </TouchableOpacity>
         </View>
-        <ScrollView>
-          <View style={styles.div}>
-            <View style={styles.top}>
-              <View style={styles.img}>
-                <Image
-                  source={{uri: this.state.photo}}
-                  style={{width: '70%', flex: 1, resizeMode: 'contain'}}
-                />
-              </View>
-            </View>
-            <View style={styles.content}>
-              <View style={styles.field}>
-                <Text style={styles.title}>Username</Text>
-                <TextInput
-                  style={styles.input}
-                  defaultValue={this.state.username}
-                />
-              </View>
-              <View style={styles.field}>
-                <Text style={styles.title}>Fullname</Text>
-                <TextInput style={styles.input} />
-              </View>
-              <View style={styles.field}>
-                <Text style={styles.title}>Email</Text>
-                <TextInput
-                  style={styles.input}
-                  defaultValue={this.state.email}
-                />
-              </View>
-            </View>
-            <TouchableOpacity activeOpacity={0.8} style={styles.button}>
-              <Text style={{color: 'white', fontSize: 18, fontWeight: '700'}}>
-                Save
-              </Text>
-            </TouchableOpacity>
+        {this.state.loadingPage == true ? (
+          <View style={styles.container}>
+            <ActivityIndicator color="#8de969" size={'large'} />
           </View>
-        </ScrollView>
+        ) : (
+          <ScrollView>
+            <View style={styles.div}>
+              <View style={styles.top}>
+                <View style={styles.img}>
+                  <Image
+                    source={{uri: this.state.profile.photo}}
+                    style={styles.photo}
+                  />
+                </View>
+              </View>
+              <View style={styles.content}>
+                <View
+                  style={{
+                    alignItems: 'flex-end',
+                  }}>
+                  {this.state.edit == false ? (
+                    <TouchableOpacity
+                      onPress={() => this.setState({edit: true})}
+                      activeOpacity={0.8}
+                      style={styles.butEdit}>
+                      <Icon
+                        type="MaterialCommunityIcons"
+                        name="pencil"
+                        style={{color: '#8de969', fontSize: 20}}
+                      />
+                    </TouchableOpacity>
+                  ) : null}
+                </View>
+                <View style={styles.field}>
+                  <Text style={styles.title}>Username</Text>
+                  {this.state.edit == false ? (
+                    <Text style={styles.info}>
+                      {this.state.profile.username}
+                    </Text>
+                  ) : (
+                    <TextInput
+                      style={styles.input}
+                      defaultValue={this.state.profile.username}
+                      onChangeText={text => this.handleChange('username', text)}
+                    />
+                  )}
+                </View>
+                <View style={styles.field}>
+                  <Text style={styles.title}>Fullname</Text>
+                  {this.state.edit == false ? (
+                    <Text style={styles.info}>
+                      {this.state.profile.fullname}
+                    </Text>
+                  ) : (
+                    <TextInput
+                      style={styles.input}
+                      defaultValue={this.state.profile.fullname}
+                      onChangeText={text => this.handleChange('fullname', text)}
+                    />
+                  )}
+                </View>
+                <View style={styles.field}>
+                  <Text style={styles.title}>Email</Text>
+                  {this.state.edit == false ? (
+                    <Text style={styles.info}>{this.state.profile.email}</Text>
+                  ) : (
+                    <TextInput
+                      style={styles.input}
+                      defaultValue={this.state.profile.email}
+                      onChangeText={text => this.handleChange('email', text)}
+                    />
+                  )}
+                </View>
+              </View>
+              {this.state.edit == true ? (
+                this.state.isLoading == false ? (
+                  <TouchableOpacity
+                    onPress={this.handleSave}
+                    activeOpacity={0.8}
+                    style={styles.button}>
+                    <Text
+                      style={{color: 'white', fontSize: 18, fontWeight: '700'}}>
+                      Save
+                    </Text>
+                  </TouchableOpacity>
+                ) : (
+                  <View style={styles.spin}>
+                    <ActivityIndicator color="#8de969" size={'large'} />
+                  </View>
+                )
+              ) : null}
+            </View>
+          </ScrollView>
+        )}
       </Fragment>
     );
   }
 }
 
 const styles = StyleSheet.create({
+  photo: {
+    width: '70%',
+    flex: 1,
+    resizeMode: 'contain',
+  },
+  spin: {
+    marginTop: 30,
+    alignItems: 'center',
+    justifyContent: 'flex-start',
+    width: '100%',
+  },
+  butEdit: {
+    backgroundColor: '#433a3f',
+    borderRadius: 3,
+    padding: 4,
+    elevation: 2,
+    marginTop: -30,
+  },
+  container: {
+    width: '100%',
+    justifyContent: 'center',
+    height: '100%',
+    alignItems: 'center',
+  },
+  toast: {
+    margin: 15,
+    borderRadius: 5,
+  },
   div: {
     justifyContent: 'center',
     alignItems: 'flex-end',
@@ -161,6 +315,11 @@ const styles = StyleSheet.create({
     color: '#433a3f',
     fontWeight: '700',
   },
+  info: {
+    marginVertical: 3,
+    paddingHorizontal: 0,
+    color: 'grey',
+  },
   input: {
     borderBottomWidth: 1,
     borderColor: 'whitesmoke',
@@ -179,7 +338,7 @@ const styles = StyleSheet.create({
     padding: 20,
   },
   img: {
-    backgroundColor: 'whitesmoke',
+    backgroundColor: 'white',
     elevation: 2,
     width: 140,
     height: 140,
@@ -193,6 +352,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     width: '100%',
     height: 200,
+    backgroundColor: 'whitesmoke',
   },
   iconBack: {
     justifyContent: 'center',

@@ -9,17 +9,24 @@ import {
   StatusBar,
 } from 'react-native';
 
-import {Tab, Tabs, Icon} from 'native-base';
+import {Icon} from 'native-base';
 
 import {withNavigation} from 'react-navigation';
 
 class Profile extends Component {
   constructor() {
     super();
-    this.state = {};
+    this.state = {
+      friendProfile: {},
+    };
   }
 
+  componentDidMount = async () => {
+    await this.setState({friendProfile: this.props.navigation.state.params});
+  };
+
   render() {
+    const {friendProfile} = this.state;
     return (
       <Fragment>
         <View>
@@ -30,17 +37,11 @@ class Profile extends Component {
           <View style={styles.top}>
             <Image
               source={{
-                uri: 'https://picsum.photos/id/526/200/200',
+                uri: friendProfile.photo,
               }}
               style={styles.profileImg}
             />
-            <View
-              style={{
-                backgroundColor: 'rgba(0,0,0,0.2)',
-                width: '100%',
-                height: '100%',
-                position: 'absolute',
-              }}></View>
+            <View style={styles.overlay}></View>
             <View style={styles.header}>
               <TouchableOpacity
                 onPress={() => this.props.navigation.goBack()}
@@ -52,7 +53,11 @@ class Profile extends Component {
                   style={{color: 'white', fontSize: 22}}
                 />
               </TouchableOpacity>
-              <TouchableOpacity activeOpacity={0.8}>
+              <TouchableOpacity
+                activeOpacity={0.8}
+                onPress={() =>
+                  this.props.navigation.navigate('Chat', friendProfile)
+                }>
                 <Icon
                   type="MaterialCommunityIcons"
                   name="chat"
@@ -62,22 +67,18 @@ class Profile extends Component {
             </View>
             <View style={styles.name}>
               <Text style={{fontSize: 20, fontWeight: '700', color: 'white'}}>
-                Name
+                {friendProfile.username}
               </Text>
             </View>
           </View>
           <View style={styles.content}>
             <View style={styles.field}>
-              <Text style={styles.title}>Username</Text>
-              <Text style={styles.sub}>name</Text>
-            </View>
-            <View style={styles.field}>
               <Text style={styles.title}>Fullname</Text>
-              <Text style={styles.sub}>name</Text>
+              <Text style={styles.sub}>{friendProfile.fullname}</Text>
             </View>
             <View style={styles.field}>
               <Text style={styles.title}>Email</Text>
-              <Text style={styles.sub}>name</Text>
+              <Text style={styles.sub}>{friendProfile.email}</Text>
             </View>
           </View>
         </View>
@@ -87,10 +88,16 @@ class Profile extends Component {
 }
 
 const styles = StyleSheet.create({
+  overlay: {
+    backgroundColor: 'rgba(0,0,0,0.2)',
+    width: '100%',
+    height: '100%',
+    position: 'absolute',
+  },
   profileImg: {
     flex: 1,
     width: '100%',
-    resizeMode: 'cover',
+    resizeMode: 'contain',
     position: 'absolute',
     height: '100%',
   },
@@ -118,13 +125,11 @@ const styles = StyleSheet.create({
   field: {
     height: 'auto',
     width: '100%',
-    marginBottom: 15,
-    backgroundColor: 'white',
+    backgroundColor: 'whitesmoke',
     // borderRadius: 5,
     padding: 10,
-    elevation: 3,
-    borderLeftWidth: 2,
-    borderColor: '#8de969',
+    borderColor: 'white',
+    borderTopWidth: 2,
   },
   content: {
     height: 'auto',
@@ -136,7 +141,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     width: '100%',
-    height: 200,
+    height: 250,
     backgroundColor: 'silver',
   },
   iconBack: {
