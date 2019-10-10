@@ -69,8 +69,8 @@ class Login extends Component {
         <View>
           <StatusBar backgroundColor={'#433a3f'} />
         </View>
-        {/* <Image source={Background} style={styles.background} /> */}
-        <View style={styles.background}></View>
+        <Image source={Background} style={styles.background} />
+        {/* <View style={styles.background}></View> */}
 
         <View style={styles.header}>
           <Image

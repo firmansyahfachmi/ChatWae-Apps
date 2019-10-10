@@ -18,8 +18,16 @@ class AppStateExample extends Component {
     AppState.removeEventListener('change', this._handleAppStateChange);
   }
 
-  _handleAppStateChange = nextAppState => {
-    if (this.state.userId === null) {
+  _handleAppStateChange = async nextAppState => {
+    await AsyncStorage.getItem('uid').then(res => {
+      if (res === null) {
+        this.setState({userId: null});
+      } else {
+        this.setState({userId: res});
+      }
+    });
+
+    if (this.state.userId !== null) {
       if (
         this.state.appState.match(/active|background/) &&
         nextAppState === 'active'
@@ -36,6 +44,7 @@ class AppStateExample extends Component {
           .database()
           .ref('users/' + this.state.userId)
           .update({status: 'Offline'});
+        this.setState({userId: null});
       }
     } else {
       return null;
