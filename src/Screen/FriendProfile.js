@@ -128,8 +128,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'whitesmoke',
     // borderRadius: 5,
     padding: 10,
-    borderColor: 'white',
-    borderTopWidth: 2,
+    marginBottom: 10,
   },
   content: {
     height: 'auto',

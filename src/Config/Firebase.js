@@ -6,7 +6,7 @@ const firebaseConfig = {
   authDomain: 'chatwae-255111.firebaseapp.com',
   databaseURL: 'https://chatwae-255111.firebaseio.com',
   projectId: 'chatwae-255111',
-  storageBucket: '',
+  storageBucket: 'chatwae-255111.appspot.com',
   messagingSenderId: '795918562003',
   appId: '1:795918562003:web:c7fa0b8c0a824a7c561a26',
 };

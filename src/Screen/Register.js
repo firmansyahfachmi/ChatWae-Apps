@@ -25,7 +25,7 @@ class Register extends Component {
         fullname: '',
         email: '',
         photo:
-          'https://www.shareicon.net/data/128x128/2016/11/21/854783_fett_459x512.png',
+          'https://www.shareicon.net/data/128x128/2016/10/25/847596_face_512x512.png',
         password: '',
       },
       isLoading: false,

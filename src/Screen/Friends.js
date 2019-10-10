@@ -23,7 +23,6 @@ class Friends extends Component {
 
   componentDidMount = async () => {
     const uid = await AsyncStorage.getItem('uid');
-    this.setState({uid: await AsyncStorage.getItem('uid')});
     firebase
       .database()
       .ref('messages/' + uid)
@@ -39,7 +38,7 @@ class Friends extends Component {
     firebase
       .database()
       .ref('users/')
-      .once('value', result => {
+      .on('value', result => {
         let data = result.val();
         if (data !== null) {
           let users = Object.values(data);
@@ -57,11 +56,12 @@ class Friends extends Component {
     chat.forEach((temp, key) => {
       data[key] = users.find(item => item.uid === temp.id);
     });
+    console.log('s', data);
     return (
       <Fragment>
         <View style={styles.container}>
           {data.map(user => (
-            <CardChat data={user} />
+            <CardChat data={user} key={user.uid} />
           ))}
         </View>
       </Fragment>

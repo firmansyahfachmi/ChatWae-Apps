@@ -21,6 +21,10 @@ import firebase from '../Config/Firebase';
 
 import AsyncStorage from '@react-native-community/async-storage';
 
+import ImagePicker from 'react-native-image-picker';
+
+import RNFetchBlob from 'rn-fetch-blob';
+
 class Profile extends Component {
   constructor() {
     super();
@@ -52,8 +56,7 @@ class Profile extends Component {
     firebase
       .database()
       .ref('users/' + this.state.userId)
-      .once('value')
-      .then(res => {
+      .on('value', res => {
         this.setState({loadingPage: false});
         let profile = res.val();
         if (profile !== null) {
@@ -62,6 +65,63 @@ class Profile extends Component {
           });
         }
       });
+  };
+
+  changeImage = async () => {
+    const Blob = RNFetchBlob.polyfill.Blob;
+    const fs = RNFetchBlob.fs;
+    window.XMLHttpRequest = RNFetchBlob.polyfill.XMLHttpRequest;
+    window.Blob = Blob;
+
+    const options = {
+      title: 'Select Image',
+      storageOptions: {
+        skipBackup: true,
+        path: 'images',
+      },
+      mediaType: 'photo',
+    };
+
+    let Permission =
+      (await PermissionsAndroid.check(PermissionsAndroid.PERMISSIONS.CAMERA)) &&
+      PermissionsAndroid.check(
+        PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
+      ) &&
+      PermissionsAndroid.check(
+        PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE,
+      );
+    if (!Permission) {
+      Permission = await this.requestPermission();
+    } else {
+      ImagePicker.showImagePicker(options, response => {
+        let uploadBob = null;
+        const imageRef = firebase.storage().ref('images/' + this.state.userId);
+        fs.readFile(response.path, 'base64')
+          .then(data => {
+            return Blob.build(data, {type: `${response.mime};BASE64`});
+          })
+          .then(blob => {
+            uploadBob = blob;
+            return imageRef.put(blob, {contentType: `${response.mime}`});
+          })
+          .then(() => {
+            uploadBob.close();
+            return imageRef.getDownloadURL();
+          })
+          .then(url => {
+            this.setState({loadingPage: true});
+            firebase
+              .database()
+              .ref('users/' + this.state.userId)
+              .update({photo: url})
+              .then(() => {
+                this.setState({loadingPage: false});
+                this.setState({edit: false});
+              });
+          })
+          .catch(err => console.log(err));
+      });
+    }
   };
 
   handleLogout = () => {
@@ -181,6 +241,17 @@ class Profile extends Component {
                     style={styles.photo}
                   />
                 </View>
+
+                <TouchableOpacity
+                  onPress={this.changeImage}
+                  style={styles.buttonImage}
+                  activeOpacity={0.9}>
+                  <Icon
+                    type="Entypo"
+                    name="camera"
+                    style={{color: 'white', fontSize: 17}}
+                  />
+                </TouchableOpacity>
               </View>
               <View style={styles.content}>
                 <View
@@ -234,9 +305,13 @@ class Profile extends Component {
                     <Text style={styles.info}>{this.state.profile.email}</Text>
                   ) : (
                     <TextInput
-                      style={styles.input}
+                      style={[
+                        styles.input,
+                        {backgroundColor: 'whitesmoke', padding: 10},
+                      ]}
                       defaultValue={this.state.profile.email}
-                      onChangeText={text => this.handleChange('email', text)}
+                      // onChangeText={text => this.handleChange('email', text)}
+                      editable={false}
                     />
                   )}
                 </View>
@@ -267,8 +342,19 @@ class Profile extends Component {
 }
 
 const styles = StyleSheet.create({
+  buttonImage: {
+    height: 30,
+    width: 30,
+    backgroundColor: '#00000090',
+    borderRadius: 50,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: -35,
+    marginRight: -100,
+    zIndex: 2,
+  },
   photo: {
-    width: '70%',
+    width: '100%',
     flex: 1,
     resizeMode: 'contain',
   },
@@ -324,7 +410,6 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderColor: 'whitesmoke',
     paddingVertical: 2,
-    paddingHorizontal: 0,
     color: 'grey',
   },
   field: {
@@ -339,7 +424,6 @@ const styles = StyleSheet.create({
   },
   img: {
     backgroundColor: 'white',
-    elevation: 2,
     width: 140,
     height: 140,
     borderRadius: 100,
@@ -352,7 +436,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     width: '100%',
     height: 200,
-    backgroundColor: 'whitesmoke',
+    backgroundColor: 'grey',
   },
   iconBack: {
     justifyContent: 'center',

@@ -23,13 +23,34 @@ class CardChat extends Component {
               <View style={styles.avatar}>
                 <Image
                   source={{uri: this.props.data.photo}}
-                  style={{flex: 1, width: '70%', resizeMode: 'contain'}}
+                  style={{flex: 1, width: '100%', resizeMode: 'contain'}}
                 />
               </View>
             </View>
-            <View style={styles.desc}>
-              <Text style={styles.name}>{this.props.data.username}</Text>
-              <Text style={styles.msg}>{this.props.data.status}</Text>
+            <View
+              style={{
+                justifyContent: 'space-between',
+                flexDirection: 'row',
+                width: '78%',
+                borderBottomWidth: 1,
+                borderColor: 'whitesmoke',
+              }}>
+              <View style={styles.desc}>
+                <Text style={styles.name}>{this.props.data.username}</Text>
+                <Text style={styles.msg}>{this.props.data.fullname}</Text>
+              </View>
+              <View
+                style={{
+                  width: '20%',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                }}>
+                {this.props.data.status === 'Online' ? (
+                  <Text style={{color: 'green'}}>Online</Text>
+                ) : (
+                  <Text style={{color: 'silver'}}>Offline</Text>
+                )}
+              </View>
             </View>
           </>
         </TouchableHighlight>
@@ -40,12 +61,11 @@ class CardChat extends Component {
 
 const styles = StyleSheet.create({
   msg: {
-    flex: 1,
     color: 'grey',
   },
   name: {
     fontSize: 18,
-    flex: 1,
+
     fontWeight: '700',
   },
   avatar: {
@@ -55,6 +75,7 @@ const styles = StyleSheet.create({
     borderRadius: 50,
     justifyContent: 'center',
     alignItems: 'center',
+    overflow: 'hidden',
   },
   img: {
     width: 70,
@@ -63,10 +84,7 @@ const styles = StyleSheet.create({
     paddingTop: 3,
   },
   desc: {
-    borderBottomWidth: 1,
-    borderColor: 'whitesmoke',
-    width: '80%',
-    width: '75%',
+    width: 'auto',
     marginLeft: 15,
   },
   card: {

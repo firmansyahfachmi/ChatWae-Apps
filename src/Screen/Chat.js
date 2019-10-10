@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   StatusBar,
   Image,
+  TouchableHighlight,
 } from 'react-native';
 import {GiftedChat, Bubble} from 'react-native-gifted-chat';
 
@@ -67,7 +68,7 @@ class Profile extends Component {
         user: {
           _id: this.state.myUid,
           name: this.state.myUsername,
-          avatar: this.state.avatar,
+          // avatar: this.state.avatar,
         },
       };
       updates[
@@ -101,6 +102,10 @@ class Profile extends Component {
         wrapperStyle={{
           right: {
             backgroundColor: '#77d154',
+            borderRadius: 8,
+          },
+          left: {
+            borderRadius: 8,
           },
         }}
       />
@@ -125,31 +130,34 @@ class Profile extends Component {
               style={{color: 'white', fontSize: 22}}
             />
           </TouchableOpacity>
-          <TouchableOpacity
+          <TouchableHighlight
+            underlayColor="rgba(0,0,0,0.2)"
             onPress={() =>
               this.props.navigation.navigate('FriendProfile', friendData)
             }
-            activeOpacity={1}
             style={styles.headSub}>
-            <View style={styles.img}>
-              <Image source={{uri: friendData.photo}} style={styles.photo} />
-            </View>
-            <View style={{marginLeft: 5}}>
-              <Text style={styles.heading}>{friendData.username}</Text>
-              <Text style={{color: 'white'}}>{friendData.status}</Text>
-            </View>
-          </TouchableOpacity>
+            <>
+              <View style={styles.img}>
+                <Image source={{uri: friendData.photo}} style={styles.photo} />
+              </View>
+              <View style={{marginLeft: 5}}>
+                <Text style={styles.heading}>{friendData.username}</Text>
+                <Text style={{color: 'white'}}>{friendData.status}</Text>
+              </View>
+            </>
+          </TouchableHighlight>
         </View>
         <GiftedChat
           messages={this.state.messages}
           onSend={this.sendMessage}
-          showAvatarForEveryMessage={false}
+          showAvatarForEveryMessage={true}
           renderBubble={this.renderBubble}
+          renderAvatar={() => null}
           alignTop={true}
           user={{
             _id: this.state.myUid,
             name: this.state.myUsername,
-            avatar: this.state.avatar,
+            // avatar: this.state.avatar,
           }}
           onInputTextChanged={value => this.setState({text: value})}
         />
@@ -161,13 +169,15 @@ class Profile extends Component {
 const styles = StyleSheet.create({
   photo: {
     flex: 1,
-    width: '70%',
+    width: '100%',
     resizeMode: 'contain',
   },
   headSub: {
-    width: '90%',
+    width: 'auto',
     flexDirection: 'row',
     alignItems: 'center',
+    paddingRight: 10,
+    height: '100%',
   },
   img: {
     backgroundColor: 'silver',
@@ -195,7 +205,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#433a3f',
     height: 60,
     width: '100%',
-    padding: 12,
+    paddingHorizontal: 12,
     zIndex: 2,
     flexDirection: 'row',
     alignItems: 'center',

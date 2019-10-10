@@ -14,7 +14,6 @@ import Mark from '../Assets/MarkerWhite.png';
 class Maps extends Component {
   constructor() {
     super();
-    this.usersLocation();
 
     this.state = {
       region: null,
@@ -27,8 +26,9 @@ class Maps extends Component {
   }
 
   componentDidMount = async () => {
+    await this.usersLocation();
     this.setState({userId: await AsyncStorage.getItem('uid')});
-    Geolocation.watchPosition(
+    Geolocation.getCurrentPosition(
       position => {
         let Location = {
           latitude: position.coords.latitude,
@@ -74,9 +74,9 @@ class Maps extends Component {
       });
   };
 
-  componentWillUnmount() {
-    Geolocation.stopObserving();
-  }
+  // componentWillUnmount() {
+  //   Geolocation.stopObserving();
+  // }
 
   changeRegion = (region, lat, long) => {
     this.setState({
@@ -120,7 +120,11 @@ class Maps extends Component {
                     longitude: item.Location.longitude,
                   }}>
                   {item.uid == userId ? (
-                    <View style={{width: 40, height: 40, zIndex: 4}}>
+                    <View
+                      style={{
+                        width: 70,
+                        height: 70,
+                      }}>
                       <Image
                         source={Mark}
                         style={{
@@ -149,7 +153,7 @@ const styles = StyleSheet.create({
   image: {
     resizeMode: 'contain',
     flex: 1,
-    width: '70%',
+    width: '100%',
   },
   avatar: {
     zIndex: 1,
@@ -159,6 +163,9 @@ const styles = StyleSheet.create({
     backgroundColor: 'silver',
     justifyContent: 'center',
     alignItems: 'center',
+    overflow: 'hidden',
+    borderWidth: 1,
+    borderColor: 'grey',
   },
   map: {
     width: '100%',
