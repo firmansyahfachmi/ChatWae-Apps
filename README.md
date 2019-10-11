@@ -1,8 +1,10 @@
-<h1 align="center">ChatWae - Apps</h1>
+<h1 align="center">ChatWae - Apps</h1><br/>
 
 <p align="center">
   <img src="https://user-images.githubusercontent.com/52324743/66672306-2dd2ae00-ec88-11e9-9319-f4bb56f402fb.png" width="450"/>
 </p>
+
+<br/>
 
 
 ## Introduction
