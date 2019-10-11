@@ -53,4 +53,5 @@ ChatWae is the Chatting App based on Maps, find friend from maps and start the c
   </p>
    
 ## License
+Mohammad Fachmi Firmansyah - 2019
 
