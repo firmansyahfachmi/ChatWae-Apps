@@ -21,7 +21,7 @@ ChatWae is the Chatting App based on Maps, find friend from maps and start the c
 * [`npm`](https://www.npmjs.com/get-npm)
 * [`react-native`](https://facebook.github.io/react-native/docs/getting-started)
 * [`react-native-cli`](https://facebook.github.io/react-native/docs/getting-started)
-* [`Setting Up Firebase`](https://firebase.google.com/)
+* [`Firebase`](https://firebase.google.com/)
  
 ## Screenshot
   <p align="center">
