@@ -1,10 +1,10 @@
-<h1 align="center">ChatWae - Apps</h1><br/>
+<h1 align="center">ChatWae - Apps</h1><br/><br/>
 
 <p align="center">
   <img src="https://user-images.githubusercontent.com/52324743/66672306-2dd2ae00-ec88-11e9-9319-f4bb56f402fb.png" width="450"/>
 </p>
 
-<br/>
+<br/><br/>
 
 
 ## Introduction
@@ -52,5 +52,5 @@ ChatWae is the Chatting App based on Maps, find friend from maps and start the c
     
   </p>
    
-# License
+## License
 
