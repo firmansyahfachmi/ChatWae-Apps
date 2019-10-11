@@ -18,12 +18,14 @@ ChatWae is the Chatting App based on Maps, find friend from maps and start the c
   - Firebase Realtime
  
 ## Screenshot
-  <p align="center">
+  <p>
     <span>
-      <img src="https://user-images.githubusercontent.com/52324743/66672673-0af4c980-ec89-11e9-9deb-33269487a3cb.jpg" width="250px" />&nbsp;&nbsp;&nbsp;
+      <img src="https://user-images.githubusercontent.com/52324743/66672673-0af4c980-ec89-11e9-9deb-33269487a3cb.jpg" width="240px" />
+      &nbsp;&nbsp;
       <img src="https://user-images.githubusercontent.com/52324743/66672738-2bbd1f00-ec89-11e9-9156-917f8d38efb3.png" width="200px" />
-      &nbsp;&nbsp;&nbsp;
+      &nbsp;&nbsp;
       <img src="https://user-images.githubusercontent.com/52324743/66672907-a8e89400-ec89-11e9-8a2d-d896ce314f07.png" width="200px" />
+      &nbsp;&nbsp;
       <img src="https://user-images.githubusercontent.com/52324743/66672997-dc2b2300-ec89-11e9-9ee8-c2707c9f3704.png" width="200px" />
     </span>
     
