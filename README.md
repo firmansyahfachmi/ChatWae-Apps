@@ -14,13 +14,14 @@ ChatWae is the Chatting App based on Maps, find friend from maps and start the c
 
 ## Requirements
   - NPM (Node Package Manager)
-  - React-Natvei
+  - React-Native
+  - Firebase Realtime
  
 ## Screenshot
   <p align="center">
     <span>
-      <img src="https://user-images.githubusercontent.com/52324743/65371999-37be4e00-dc94-11e9-8fc3-d59f8147c9cf.jpg" width="400px" />&nbsp;&nbsp;&nbsp;
-      <img src="https://user-images.githubusercontent.com/52324743/65372087-989a5600-dc95-11e9-900f-3fd3dec778e0.jpg" width="400px" />
+      <img src="https://user-images.githubusercontent.com/52324743/66672673-0af4c980-ec89-11e9-9deb-33269487a3cb.jpg" width="250px" />&nbsp;&nbsp;&nbsp;
+      <img src="https://user-images.githubusercontent.com/52324743/66672738-2bbd1f00-ec89-11e9-9156-917f8d38efb3.png" width="250px" />
     </span>
     
   </p>
