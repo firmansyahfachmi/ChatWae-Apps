@@ -151,7 +151,7 @@ class Maps extends Component {
 
 const styles = StyleSheet.create({
   image: {
-    resizeMode: 'contain',
+    resizeMode: 'cover',
     flex: 1,
     width: '100%',
   },

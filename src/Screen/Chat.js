@@ -28,10 +28,23 @@ class Profile extends Component {
       myUsername: '',
       avatar: '',
       text: '',
+      status: '',
     };
   }
 
   componentDidMount = async () => {
+    firebase
+      .database()
+      .ref('users/' + this.state.friendData.uid)
+      .on('value', result => {
+        let data = result.val();
+        if (data !== null) {
+          let status = Object.values(data);
+          this.setState({
+            status,
+          });
+        }
+      });
     this.setState({
       myUid: await AsyncStorage.getItem('uid'),
       myUsername: await AsyncStorage.getItem('username'),
@@ -142,7 +155,9 @@ class Profile extends Component {
               </View>
               <View style={{marginLeft: 5}}>
                 <Text style={styles.heading}>{friendData.username}</Text>
-                <Text style={{color: 'white'}}>{friendData.status}</Text>
+                <Text style={{color: 'white'}}>
+                  {this.state.status || friendData.status}
+                </Text>
               </View>
             </>
           </TouchableHighlight>
@@ -170,7 +185,7 @@ const styles = StyleSheet.create({
   photo: {
     flex: 1,
     width: '100%',
-    resizeMode: 'contain',
+    resizeMode: 'cover',
   },
   headSub: {
     width: 'auto',

@@ -97,7 +97,7 @@ const styles = StyleSheet.create({
   profileImg: {
     flex: 1,
     width: '100%',
-    resizeMode: 'contain',
+    resizeMode: 'cover',
     position: 'absolute',
     height: '100%',
   },

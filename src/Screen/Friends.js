@@ -56,7 +56,6 @@ class Friends extends Component {
     chat.forEach((temp, key) => {
       data[key] = users.find(item => item.uid === temp.id);
     });
-    console.log('s', data);
     return (
       <Fragment>
         <View style={styles.container}>

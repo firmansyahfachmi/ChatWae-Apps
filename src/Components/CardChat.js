@@ -23,7 +23,7 @@ class CardChat extends Component {
               <View style={styles.avatar}>
                 <Image
                   source={{uri: this.props.data.photo}}
-                  style={{flex: 1, width: '100%', resizeMode: 'contain'}}
+                  style={{flex: 1, width: '100%', resizeMode: 'cover'}}
                 />
               </View>
             </View>
