@@ -18,25 +18,25 @@ ChatWae is the Chatting App based on Maps, find friend from maps and start the c
   - Firebase Realtime
  
 ## Screenshot
-  <p>
+  <p align="center">
     <span>
-      <img src="https://user-images.githubusercontent.com/52324743/66672673-0af4c980-ec89-11e9-9deb-33269487a3cb.jpg" width="240px" />
+      <img src="https://user-images.githubusercontent.com/52324743/66672673-0af4c980-ec89-11e9-9deb-33269487a3cb.jpg" width="300px" />
       &nbsp;
-      <img src="https://user-images.githubusercontent.com/52324743/66672738-2bbd1f00-ec89-11e9-9156-917f8d38efb3.png" width="200px" />
+      <img src="https://user-images.githubusercontent.com/52324743/66672738-2bbd1f00-ec89-11e9-9156-917f8d38efb3.png" width="250px" />
       &nbsp;
-      <img src="https://user-images.githubusercontent.com/52324743/66672907-a8e89400-ec89-11e9-8a2d-d896ce314f07.png" width="200px" />
-      &nbsp;
-      <img src="https://user-images.githubusercontent.com/52324743/66672997-dc2b2300-ec89-11e9-9ee8-c2707c9f3704.png" width="200px" />
+      <img src="https://user-images.githubusercontent.com/52324743/66672907-a8e89400-ec89-11e9-8a2d-d896ce314f07.png" width="250px" />
     </span>
     
   </p>
-  <p align="center">
+   <p align="center">
     <span>
-       <img src="https://user-images.githubusercontent.com/52324743/65372096-b23b9d80-dc95-11e9-8e7f-31c712898bce.jpg" width="800px" />
+     <img src="https://user-images.githubusercontent.com/52324743/66672997-dc2b2300-ec89-11e9-9ee8-c2707c9f3704.png" width="250px" />
+      &nbsp;
+      <img src="https://user-images.githubusercontent.com/52324743/66672738-2bbd1f00-ec89-11e9-9156-917f8d38efb3.png" width="250px" />
+      &nbsp;
+      <img src="https://user-images.githubusercontent.com/52324743/66672907-a8e89400-ec89-11e9-8a2d-d896ce314f07.png" width="250px" />
     </span>
+    
   </p>
-  <p align="center">
-    <span>
-       <img src="https://user-images.githubusercontent.com/52324743/65372174-b320ff00-dc96-11e9-9729-ee4e07744324.JPG" width="800px" />
-    </span>
-  </p>
+   
+
