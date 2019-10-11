@@ -40,7 +40,7 @@ ChatWae is the Chatting App based on Maps, find friend from maps and start the c
       &nbsp;&nbsp;
       <img src="https://user-images.githubusercontent.com/52324743/66673420-b81c1180-ec8a-11e9-8433-93a5b41dd9b0.png" width="250px" />
       &nbsp;&nbsp;
-      <img src="https://user-images.githubusercontent.com/52324743/66673453-ccf8a500-ec8a-11e9-94d8-92cc9fae3ce9.png" width="250px" />
+      <img src="https://user-images.githubusercontent.com/52324743/66675991-c0774b00-ec90-11e9-826b-a56d9b229ccc.png" width="250px" />
     </span>
   </p>
    <p align="center">
