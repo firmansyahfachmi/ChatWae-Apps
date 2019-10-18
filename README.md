@@ -4,7 +4,16 @@
   <img src="https://user-images.githubusercontent.com/52324743/66672306-2dd2ae00-ec88-11e9-9319-f4bb56f402fb.png" width="450"/>
 </p>
 
+
+
 <br/><br/>
+
+<a href="#">
+  <img src="https://img.shields.io/badge/React%20Native-0.60-blue.svg?style=flat-square" alt="npm version">
+</a>
+<a href="#">
+  <img src="https://img.shields.io/badge/Firebase-7.2.0-yellow.svg?style=flat-square" alt="npm version">
+</a>
 
 
 ## Introduction
