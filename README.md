@@ -60,6 +60,11 @@ ChatWae is the Chatting App based on Maps, find friend from maps and start the c
     </span>
     
   </p>
+  
+## Download APK
+[`Download Now`]
+
+
    
 ## License
 Mohammad Fachmi Firmansyah - &copy; 2019
