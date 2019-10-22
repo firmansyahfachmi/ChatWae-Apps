@@ -62,7 +62,7 @@ ChatWae is the Chatting App based on Maps, find friend from maps and start the c
   </p>
   
 ## Download APK
-[`Download Now`]
+[`Download Now`](https://bit.ly/2BvsISv)
 
 
    
